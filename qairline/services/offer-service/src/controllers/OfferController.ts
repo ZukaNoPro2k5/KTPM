@@ -3,8 +3,11 @@ import { Request, Response } from 'express';
 import connection from '../database/database';
 import { CreateOfferRequest, DeleteOfferRequest } from '../types/offer';
 import { sendEmail } from '../services/EmailService';
+import axios from 'axios';
 
 export class OfferController {
+  private userServiceUrl = process.env.USER_SERVICE_URL || 'http://localhost:5001';
+
   // Lay tat ca offers (public - khong can dang nhap)
   getAllOffers(req: Request, res: Response): void {
     const query = 'SELECT PostID, Title, Content, PostDate FROM Offers';
@@ -16,17 +19,19 @@ export class OfferController {
         return;
       }
 
+      // Nếu không có kết quả
       if ((results as any).length === 0) {
         res.status(404).json({ message: 'No offers found' });
         return;
       }
 
+      // Trả về tất cả các offers
       res.status(200).json(results);
     });
   }
 
   // Tao offer moi (Admin only) va gui email thong bao cho tat ca users
-  createOffer(req: Request, res: Response): void {
+  async createOffer(req: Request, res: Response): Promise<void> {
     const { title, content, userID }: CreateOfferRequest = req.body;
 
     if (!title || !content || !userID) {
@@ -34,69 +39,64 @@ export class OfferController {
       return;
     }
 
-    // Kiem tra admin (TODO: nen goi user-service API thay vi query truc tiep)
-    const checkAdminQuery = 'SELECT Role FROM Users WHERE UserID = ?';
-    connection.query(checkAdminQuery, [userID], (err, userResults: any) => {
-      if (err) {
-        res.status(500).json({ message: 'Error checking user role', error: err.message });
-        return;
-      }
-
-      if (userResults.length === 0 || userResults[0].Role !== 'Admin') {
-        res.status(403).json({ message: 'Permission denied: User does not exist or is not an admin' });
+    try {
+      // Kiem tra admin via User Service
+      const userRoleResponse = await axios.get(`${this.userServiceUrl}/api/users/${userID}/role`);
+      
+      if (userRoleResponse.data.role !== 'Admin') {
+        res.status(403).json({ message: 'Permission denied: User is not an admin' });
         return;
       }
 
       // Tao offer moi
       const insertQuery = 'INSERT INTO Offers (Title, Content) VALUES (?, ?)';
-      connection.query(insertQuery, [title, content], (err) => {
+      connection.query(insertQuery, [title, content], async (err) => {
         if (err) {
           console.error('Error inserting offer:', err);
           res.status(500).json({ message: 'Failed to create Offer' });
           return;
         }
 
-        // Lay email tat ca users de gui thong bao
-        const getUsersQuery = 'SELECT Email FROM Users WHERE Email IS NOT NULL';
-        connection.query(getUsersQuery, async (err, results) => {
-          if (err) {
-            console.error('Error fetching user emails:', err);
-            res.status(500).json({ message: 'Failed to fetch user emails' });
-            return;
-          }
+        // Lay email tat ca users via User Service
+        try {
+          const emailsResponse = await axios.get(`${this.userServiceUrl}/api/users/emails/all`);
+          const emails = emailsResponse.data.emails;
 
-          const emails = (results as any[]).map((user) => user.Email);
+          // Gui email song song cho tat ca users
+          await Promise.all(
+            emails.map((email: string) =>
+              sendEmail(
+                email,
+                `New Offer: ${title}`,
+                `Hello,\n\nWe have a new offer for you:\n\n${content}\n\nBest regards,\nQAirline Team`
+              ).catch((error) => {
+                console.error(`Failed to send email to ${email}:`, error);
+              })
+            )
+          );
 
-          try {
-            // Gui email song song cho tat ca users
-            await Promise.all(
-              emails.map((email) =>
-                sendEmail(
-                  email,
-                  `New Offer: ${title}`,
-                  `Hello,\n\nWe have a new offer for you:\n\n${content}\n\nBest regards,\nQAirline Team`
-                ).catch((error) => {
-                  console.error(`Failed to send email to ${email}:`, error);
-                })
-              )
-            );
-
-            const timestamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
-            res.status(201).json({
-              message: 'Offer created successfully and notifications sent',
-              timestamp,
-            });
-          } catch (error) {
-            console.error('Error during email notifications:', error);
-            res.status(500).json({ message: 'Offer created but failed to send notifications' });
-          }
-        });
+          const timestamp = new Date().toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+          res.status(201).json({
+            message: 'Offer created successfully and notifications sent',
+            timestamp,
+          });
+        } catch (emailError: any) {
+          console.error('Error getting emails or sending notifications:', emailError.message);
+          res.status(201).json({ message: 'Offer created but failed to send notifications' });
+        }
       });
-    });
+
+    } catch (error: any) {
+      console.error('Error calling User Service:', error.message);
+      res.status(500).json({ 
+        message: 'Error verifying user permissions',
+        error: error.message 
+      });
+    }
   }
 
   // Xoa offer (Admin only)
-  deleteOffer(req: Request, res: Response): void {
+  async deleteOffer(req: Request, res: Response): Promise<void> {
     const { postID, UserID }: DeleteOfferRequest = req.body;
 
     if (!postID || !UserID) {
@@ -104,15 +104,11 @@ export class OfferController {
       return;
     }
 
-    // Kiem tra admin (TODO: nen goi user-service API)
-    const checkAdminQuery = 'SELECT Role FROM Users WHERE UserID = ?';
-    connection.query(checkAdminQuery, [UserID], (err, userResults: any) => {
-      if (err) {
-        res.status(500).json({ message: 'Error checking user role', error: err.message });
-        return;
-      }
-
-      if (userResults.length === 0 || userResults[0].Role !== 'Admin') {
+    try {
+      // Kiem tra admin via User Service
+      const userRoleResponse = await axios.get(`${this.userServiceUrl}/api/users/${UserID}/role`);
+      
+      if (userRoleResponse.data.role !== 'Admin') {
         res.status(403).json({ message: 'Permission denied: User is not an admin' });
         return;
       }
@@ -147,6 +143,13 @@ export class OfferController {
           res.status(200).json({ message: 'Offer deleted successfully' });
         });
       });
-    });
+
+    } catch (error: any) {
+      console.error('Error calling User Service:', error.message);
+      res.status(500).json({ 
+        message: 'Error verifying user permissions',
+        error: error.message 
+      });
+    }
   }
 }

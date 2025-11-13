@@ -1,0 +1,92 @@
+/* Nền toàn trang */
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+/* Hộp Login */
+.loginBox {
+    background-color: #CAE0E4; /* Nền trắng cho container */
+    padding: 2rem;
+    border-radius: 1rem; /* Bo tròn khối */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
+    width: 100%;
+    max-width: 400px; /* Đảm bảo responsive */
+    text-align: center;
+    margin-top: auto; /* Đẩy xuống từ trên */
+    margin-bottom: auto; /* Đẩy lên từ dưới */
+}
+
+/* Tiêu đề */
+.title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #155B80;
+    margin-bottom: 2rem;
+}
+
+
+/* Nhãn */
+.label {
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+/* Input */
+.inputContainer {
+    margin-bottom: 1.5rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem; /* Bo tròn input */
+    box-sizing: border-box;
+}
+
+/* Nút Login */
+.loginButton {
+    background-color: #0ca190;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem; /* Bo tròn nút */
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+    background-color: #0ca190; /* Màu khi hover */
+}
+
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+  
+
+/* Responsive: Đảm bảo form không bị quá nhỏ */
+@media (max-width: 480px) {
+    .loginBox {
+      padding: 1.5rem;
+    }
+    .title {
+      font-size: 1.75rem;
+    }
+    .input {
+      padding: 0.5rem;
+    }
+}

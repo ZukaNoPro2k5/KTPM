@@ -1,0 +1,202 @@
+.container {
+    margin: auto;
+    font-family: "Monsterat", sans-serif;
+    max-width: 1200px;
+    padding: 20px 100px 50px;
+    align-items: center;
+    background: var(--background);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.errorText {
+    color: red;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--foreground);
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.ticketlist {
+    list-style: none;
+}
+
+.ticketitem {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    background: var(--background);
+    color: var(--foreground);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticketitem:hover {
+    background: #D9EAF3;
+}
+
+.ticketitem .column {
+    flex: 1;
+    text-align: center;
+}
+
+.ticketitem .column:first-child {
+    flex: 1;
+    text-align: left;
+}
+
+.ticketitem .column:nth-child(2) {
+    flex: 1.5;
+    text-align: left;
+}
+
+.ticketitem .column:last-child {
+    flex: 1;
+    text-align: center;
+}
+
+.ticketitem .smalltext{
+    font-size: smaller;
+}
+
+.container button {
+    background: var(--foreground);
+    color: var(--background);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.5rem;
+    width: 50%;
+}
+
+.ticketitem button:hover {
+    background: #333333;
+}
+.ticketitem .checkinbutton:hover {
+    background: green;
+}
+
+.ticketitem .cancelbutton:hover {
+    background: red;
+}
+
+.container {
+    margin: auto;
+    font-family: "Montserrat", sans-serif;
+    max-width: 1200px;
+    padding: 20px 100px 50px;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: var(--foreground);
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.ticketlist {
+    list-style: none;
+}
+
+.ticketitem {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    background: var(--background);
+    color: var(--foreground);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticketitem:hover {
+    background: #D9EAF3;
+}
+
+.ticketitem .column {
+    flex: 1;
+    text-align: left;
+}
+
+.ticketitem .column:first-child {
+    flex: 1.25;
+    text-align: left;
+}
+
+.ticketitem .column:nth-child(2) {
+    flex: 3;
+    text-align: left;
+}
+
+.ticketitem .column:nth-child(3) {
+    flex: 1.5;
+    text-align: left;
+}
+
+.ticketitem .column:last-child {
+    flex: 2;
+    text-align: right;
+}
+
+.container .checkinbutton, .container .cancelbutton {
+    background: var(--foreground);
+    color: var(--background);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.5rem;
+}
+
+.container .checkinbutton:hover {
+    background: #333333;
+}
+
+.container .cancelbutton:hover {
+    background: var(--warning);
+}
+
+/* Responsive styles */
+@media (max-width: 800px) {
+    .container {
+        padding: 20px 20px 50px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .ticketitem {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ticketitem .column {
+        flex: 1;
+        text-align: left;
+        margin-bottom: 0.5rem;
+    }
+
+    .ticketitem .column:last-child {
+        text-align: left;
+    }
+
+    .container .checkinbutton, .container .cancelbutton {
+        width: 100%;
+        text-align: center;
+    }
+}

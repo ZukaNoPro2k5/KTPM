@@ -16,8 +16,8 @@ export interface Payment {
 }
 
 export interface CreateBookingRequest {
-  userId: number;
-  flightId: number;
+  userID: number;
+  flightID: number;
 }
 
 export interface ProcessPaymentRequest {

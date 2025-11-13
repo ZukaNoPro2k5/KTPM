@@ -39,7 +39,7 @@ describe('Flight Routes Integration Tests', () => {
         // Mock dữ liệu flights từ database
         const mockFlights = [
           {
-            FlightID: 1,
+            flightId: 1,
             AircraftTypeID: 1,
             Departure: 'Hanoi',
             Arrival: 'Ho Chi Minh',
@@ -50,7 +50,7 @@ describe('Flight Routes Integration Tests', () => {
             Status: 'scheduled'
           },
           {
-            FlightID: 2,
+            flightId: 2,
             AircraftTypeID: 2,
             Departure: 'Da Nang',
             Arrival: 'Hanoi',
@@ -192,7 +192,7 @@ describe('Flight Routes Integration Tests', () => {
 
         const mockResults = [
           {
-            FlightID: 1,
+            flightId: 1,
             Departure: 'Hanoi',
             Arrival: 'Ho Chi Minh',
             DepartureTime: '2024-12-15 08:00:00',

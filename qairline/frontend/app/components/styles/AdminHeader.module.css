@@ -1,0 +1,37 @@
+/* Thanh Header chính */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f4; /* Màu nền nhạt */
+    padding: 1rem 2rem; /* Khoảng cách xung quanh */
+    border-bottom: 2px solid #ccc; /* Đường gạch dưới header */
+}
+
+/* Container cho logo */
+.logoContainer {
+    display: flex;
+    align-items: center;
+}
+
+/* Hình ảnh logo */
+.logo {
+    height: 4rem; /* Kích thước logo có thể responsive */
+    cursor: pointer; /* Con trỏ thành tay khi hover */
+}
+
+/* Container cho chữ */
+.textContainer {
+    display: flex;
+    align-items: center;
+    text-align: right;
+}
+
+/* Chữ "Administrator" */
+.text {
+    font-weight: bolder;
+    font-size: 2rem; /* Kích thước chữ lớn và có khả năng responsive */
+    color: var(--foreground); /* Màu chữ */
+    margin: 0;
+    white-space: nowrap; /* Không xuống dòng */
+}

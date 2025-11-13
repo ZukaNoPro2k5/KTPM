@@ -6,7 +6,7 @@ import connection from '../database/database';
 
 export class UserController {
   // Dang nhap: kiem tra email/password va tra ve JWT token
-  signIn(req: Request, res: Response): void {
+  signIn(req: Request, res: Response) {
     const { email, password } = req.body;
     
     connection.execute('SELECT * FROM Users WHERE Email = ?', [email], (err, results) => {
@@ -53,8 +53,14 @@ export class UserController {
   }
 
   // Dang ky: tao user moi voi password da hash, tra ve JWT token
-  signUp(req: Request, res: Response): void {
+  signUp(req: Request, res: Response) {
+    console.log('📝 SignUp request received:', { body: req.body });
     const { name, username, email, password, role } = req.body;
+
+    if (!name || !username || !email || !password) {
+      console.log('❌ Missing required fields');
+      return res.status(400).json({ message: 'All fields are required' });
+    }
 
     connection.execute('SELECT * FROM Users WHERE Username = ? OR Email = ?', [username, email], (err, results) => {
       if (err) {
@@ -64,18 +70,21 @@ export class UserController {
 
       const rows = results as any[];
       if (rows.length > 0) {
+        console.log('❌ User already exists');
         return res.status(400).json({ message: 'Username or Email already exists' });
       }
 
+      console.log('🔐 Hashing password...');
       bcrypt.hash(password, 10, (err, hashedPassword) => {
         if (err) {
           console.error('Error hashing password:', err);
           return res.status(500).json({ message: 'Error hashing password' });
         }
 
+        console.log('💾 Inserting user into database...');
         connection.execute(
           'INSERT INTO Users (Name, Username, Email, Password, Role) VALUES (?, ?, ?, ?, ?)',
-          [name, username, email, hashedPassword, role],
+          [name, username, email, hashedPassword, role || 'Customer'],
           (err, result: any) => {
             if (err) {
               console.error('Database insert error:', err);
@@ -99,7 +108,7 @@ export class UserController {
   }
 
   // Lay tat ca users (Admin only - validation o frontend/gateway)
-  getAllUsers(req: Request, res: Response): void {
+  getAllUsers(req: Request, res: Response) {
     const query = 'SELECT * FROM Users';
     connection.query(query, (err, results) => {
       if (err) {
@@ -118,7 +127,7 @@ export class UserController {
   }
 
   // Xoa user theo UserID (Admin only - validation o frontend/gateway)
-  deleteUser(req: Request, res: Response): void {
+  deleteUser(req: Request, res: Response) {
     const { UserID } = req.body;
 
     if (!UserID) {
@@ -141,5 +150,84 @@ export class UserController {
 
       res.status(200).json({ message: 'User deleted successfully' });
     });
+  }
+
+  // ============================================
+  // INTERNAL APIs - For other services to call
+  // ============================================
+
+  // Get user by ID (for other services to verify user exists)
+  getUserById(req: Request, res: Response) {
+    const { userId } = req.params;
+    
+    if (!userId) {
+      res.status(400).json({ message: 'Missing user ID' });
+      return;
+    }
+
+    connection.execute(
+      'SELECT UserID, Name, Username, Email, Role, CreatedAt FROM Users WHERE UserID = ?',
+      [userId],
+      (err, results: any) => {
+        if (err) {
+          console.error('Error fetching user:', err);
+          res.status(500).json({ message: 'Error fetching user', error: err.message });
+          return;
+        }
+
+        if (results.length === 0) {
+          res.status(404).json({ message: 'User not found' });
+          return;
+        }
+
+        res.json(results[0]);
+      }
+    );
+  }
+
+  // Get user role (for other services to check admin)
+  getUserRole(req: Request, res: Response) {
+    const { userId } = req.params;
+    
+    if (!userId) {
+      res.status(400).json({ message: 'Missing user ID' });
+      return;
+    }
+
+    connection.execute(
+      'SELECT Role FROM Users WHERE UserID = ?',
+      [userId],
+      (err, results: any) => {
+        if (err) {
+          console.error('Error fetching user role:', err);
+          res.status(500).json({ message: 'Error fetching user role', error: err.message });
+          return;
+        }
+
+        if (results.length === 0) {
+          res.status(404).json({ message: 'User not found' });
+          return;
+        }
+
+        res.json({ role: results[0].Role });
+      }
+    );
+  }
+
+  // Get all user emails (for Offer Service to send notifications)
+  getAllEmails(req: Request, res: Response) {
+    connection.query(
+      'SELECT Email FROM Users WHERE Email IS NOT NULL',
+      (err, results: any) => {
+        if (err) {
+          console.error('Error fetching emails:', err);
+          res.status(500).json({ message: 'Error fetching emails', error: err.message });
+          return;
+        }
+
+        const emails = results.map((user: any) => user.Email);
+        res.json({ emails });
+      }
+    );
   }
 }

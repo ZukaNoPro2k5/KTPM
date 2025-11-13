@@ -17,6 +17,7 @@ qairline/
 ├── api-gateway/              # API Gateway - cổng vào chính
 │   ├── src/
 │   │   └── index.ts         # Entry point
+│   ├── .env                 # Environment variables
 │   ├── package.json
 │   └── tsconfig.json
 │
@@ -26,27 +27,35 @@ qairline/
 │   │   │   ├── controllers/ # Xử lý logic nghiệp vụ
 │   │   │   ├── database/    # Kết nối DB
 │   │   │   ├── routes/      # Định nghĩa routes
+│   │   │   ├── types/       # TypeScript types
 │   │   │   └── index.ts     # Entry point
 │   │   ├── tests/           # Unit tests
+│   │   ├── .env            # Environment variables
 │   │   ├── jest.config.js
 │   │   └── package.json
 │   │
 │   ├── flight-service/      # Service quản lý chuyến bay
 │   │   ├── src/
 │   │   ├── tests/
+│   │   ├── .env
 │   │   └── package.json
 │   │
 │   ├── offer-service/       # Service quản lý khuyến mãi
 │   │   ├── src/
 │   │   ├── tests/
+│   │   ├── .env
 │   │   └── package.json
 │   │
 │   └── user-service/        # Service quản lý người dùng
 │       ├── src/
 │       ├── tests/
+│       ├── .env
 │       └── package.json
 │
-└── shared/                  # Thư viện dùng chung (nếu có)
+├── frontend/                # Next.js frontend (port 3000)
+├── SETUP-DATABASE.sql       # Script tạo database (chạy 1 lần duy nhất)
+├── start-app.bat            # Shortcut để chạy tất cả services
+└── package.json             # Root workspace config
 ```
 
 ## 🛠️ Công nghệ sử dụng
@@ -58,7 +67,27 @@ qairline/
 - **Testing**: Jest + Supertest
 - **Dev Tools**: ts-node-dev (hot reload)
 
-## 📦 Cài đặt
+## 📦 Cài đặt nhanh (không dùng Docker)
+
+Từ thư mục `qairline/` (root monorepo):
+
+```powershell
+npm install
+
+# Chạy tất cả services + API Gateway (hot reload)
+npm run dev
+
+# Hoặc chỉ chạy API Gateway
+npm run dev:gateway
+```
+
+Ghi chú:
+- API Gateway mặc định chạy ở `http://localhost:3001`
+- Các service chạy ở cổng nội bộ 4001-4004 (gateway proxy nên frontend vẫn gọi qua gateway như cũ)
+
+---
+
+## 📦 Cài đặt thủ công
 
 ### 1. Cài đặt dependencies cho tất cả services
 
@@ -83,26 +112,55 @@ npm install
 
 ### 2. Cấu hình Database
 
-Mỗi service cần cấu hình kết nối database riêng (tạo file `.env` trong từng service):
+**Bước 1: Tạo database**
+
+Chạy file `SETUP-DATABASE.sql` trong DataGrip hoặc phpMyAdmin **1 LẦN DUY NHẤT**:
+- Mở DataGrip, kết nối MySQL (root, no password)
+- Execute file `SETUP-DATABASE.sql`
+- Database `Flight` sẽ được tạo với đầy đủ tables và sample data
+
+**Bước 2: Cấu hình .env cho các services**
+
+Mỗi service cần file `.env` (đã có sẵn):
 
 ```env
-DB_HOST=localhost
+DB_HOST=127.0.0.1
 DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=qairline_db
-PORT=3001
+DB_PASSWORD=
+DB_NAME=Flight
+PORT=500X
 ```
 
 **Lưu ý**: Mỗi service chạy trên port khác nhau:
-- Offer Service: `3001`
-- Flight Service: `3002`
-- Booking Service: `3003`
-- User Service: `3004`
-- API Gateway: `3000`
+- User Service: `5001`
+- Flight Service: `5002`
+- Booking Service: `5003`
+- Offer Service: `5004`
+- API Gateway: `3001`
+- Frontend: `3000`
 
 ## 🚀 Chạy dự án
 
+### Cách đơn giản nhất (khuyến nghị)
+
+```bash
+# Từ thư mục qairline/
+npm run dev
+
+# Hoặc double-click file start-app.bat
+```
+
+Lệnh này sẽ chạy **tất cả** các services cùng lúc:
+- Frontend (Next.js) - http://localhost:3000
+- API Gateway - http://localhost:3001
+- User Service - http://localhost:5001
+- Flight Service - http://localhost:5002
+- Booking Service - http://localhost:5003
+- Offer Service - http://localhost:5004
+
 ### Chạy từng service riêng lẻ (Development mode)
+
+Chỉ dùng khi debug một service cụ thể:
 
 ```bash
 # Chạy API Gateway
@@ -123,6 +181,10 @@ npm run dev
 
 # Chạy User Service
 cd services/user-service
+npm run dev
+
+# Chạy Frontend
+cd frontend
 npm run dev
 ```
 
@@ -175,45 +237,68 @@ npm test -- --coverage
 
 ## 🌐 API Endpoints
 
-Tất cả requests đi qua API Gateway tại `http://localhost:3000`
+Tất cả requests đi qua API Gateway tại `http://localhost:3001`
 
-### Booking Service
-- `GET /api/bookings` - Lấy danh sách đặt vé
-- `GET /api/bookings/:id` - Lấy chi tiết đặt vé
-- `POST /api/bookings` - Tạo đặt vé mới
-- `PUT /api/bookings/:id` - Cập nhật đặt vé
-- `DELETE /api/bookings/:id` - Xóa đặt vé
+### Booking Service (giữ nguyên bề mặt cũ)
+- `GET /api/Bookings` - Lấy danh sách đặt vé
+- `GET /api/Bookings/:id` - Lấy chi tiết đặt vé
+- `POST /api/Bookings` - Tạo đặt vé mới
+- `PUT /api/Bookings/:id` - Cập nhật đặt vé
+- `DELETE /api/Bookings/:id` - Xóa đặt vé
+- `POST /api/Flights/GetUserFlights` - Lấy chuyến bay theo người dùng (route đặc biệt cũ)
 
-### Flight Service
-- `GET /api/flights` - Lấy danh sách chuyến bay
-- `GET /api/flights/:id` - Lấy chi tiết chuyến bay
-- `POST /api/flights` - Tạo chuyến bay mới
-- `PUT /api/flights/:id` - Cập nhật chuyến bay
-- `DELETE /api/flights/:id` - Xóa chuyến bay
+### Flight Service (giữ nguyên bề mặt cũ)
+- `GET /api/Flights` - Lấy danh sách chuyến bay
+- `GET /api/Flights/:id` - Lấy chi tiết chuyến bay
+- `POST /api/Flights` - Tạo chuyến bay mới
+- `PUT /api/Flights/:id` - Cập nhật chuyến bay
+- `DELETE /api/Flights/:id` - Xóa chuyến bay
 
-### Offer Service
-- `GET /api/offers` - Lấy danh sách khuyến mãi
-- `GET /api/offers/:id` - Lấy chi tiết khuyến mãi
-- `POST /api/offers` - Tạo khuyến mãi mới
-- `PUT /api/offers/:id` - Cập nhật khuyến mãi
-- `DELETE /api/offers/:id` - Xóa khuyến mãi
+### Offer Service (giữ nguyên bề mặt cũ)
+- `GET /api/Offers` - Lấy danh sách khuyến mãi
+- `GET /api/Offers/:id` - Lấy chi tiết khuyến mãi
+- `POST /api/Offers` - Tạo khuyến mãi mới
+- `PUT /api/Offers/:id` - Cập nhật khuyến mãi
+- `DELETE /api/Offers/:id` - Xóa khuyến mãi
 
-### User Service
-- `GET /api/users` - Lấy danh sách người dùng
-- `GET /api/users/:id` - Lấy chi tiết người dùng
-- `POST /api/users` - Tạo người dùng mới
-- `PUT /api/users/:id` - Cập nhật người dùng
-- `DELETE /api/users/:id` - Xóa người dùng
+### User Service (giữ nguyên bề mặt cũ)
+- Auth:
+	- `POST /api/auth/signin`
+	- `POST /api/auth/signup`
+- Quản lý người dùng:
+	- `GET /api/User/GetAllUser`
+	- `POST /api/User/DeleteUser`
 
 ### Health Check
 - `GET /health` - Kiểm tra trạng thái API Gateway
 
 ## 📝 Ghi chú quan trọng
 
-1. **Thứ tự khởi động**: Khởi động các services trước, sau đó mới khởi động API Gateway
-2. **Database**: Đảm bảo MySQL đã được cài đặt và chạy
-3. **Port conflicts**: Kiểm tra không có service nào khác đang sử dụng các port 3000-3004
-4. **Environment variables**: Nhớ tạo file `.env` cho từng service
+1. **Khởi động nhanh**: Chỉ cần chạy `npm run dev` tại thư mục `qairline/` hoặc double-click `start-app.bat`
+2. **Database**: 
+   - Chạy `SETUP-DATABASE.sql` trong DataGrip **1 lần duy nhất** trước khi khởi động
+   - Database name: `Flight` (không phải `qairline_db`)
+3. **Port conflicts**: Đảm bảo các port 3000, 3001, 5001-5004 không bị chiếm
+4. **Hot reload**: Code thay đổi sẽ tự động reload, không cần restart
+5. **Frontend**: Luôn gọi API qua Gateway (localhost:3001), không gọi trực tiếp vào services
+
+## 🎯 So với kiến trúc cũ
+
+### Điểm giống (Backward Compatible):
+✅ Frontend không cần sửa gì  
+✅ API endpoints giữ nguyên 100%  
+✅ Response format giữ nguyên  
+✅ Database schema giữ nguyên  
+✅ Port 3001 vẫn là entry point  
+
+### Điểm khác (Cải tiến):
+🚀 Tách thành 4 microservices độc lập  
+🚀 Dễ scale từng service riêng  
+🚀 Code rõ ràng, dễ maintain hơn  
+🚀 Test riêng từng service  
+🚀 Deploy độc lập không ảnh hưởng toàn bộ  
+
+4. **Environment variables**: Nhớ tạo file `.env` cho từng service và `api-gateway/.env`
 
 ## 🐛 Debug
 

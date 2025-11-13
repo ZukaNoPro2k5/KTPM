@@ -46,7 +46,7 @@ app.get('/healthz', (_req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 4004;
+const PORT = process.env.PORT || 5004;
 
 app.listen(PORT, () => {
   console.log(`Offer service is running on port ${PORT}`);

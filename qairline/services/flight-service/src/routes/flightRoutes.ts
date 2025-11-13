@@ -11,4 +11,9 @@ router.post('/Add', flightController.createFlight.bind(flightController));
 router.post('/Delete', flightController.deleteFlight.bind(flightController));
 router.put('/status', flightController.updateFlightStatus.bind(flightController));
 
+// Internal APIs for other services
+router.get('/:flightId', flightController.getFlightById.bind(flightController));
+router.post('/:flightId/reserve-seat', flightController.reserveSeat.bind(flightController));
+router.post('/:flightId/release-seat', flightController.releaseSeat.bind(flightController));
+
 export default router;

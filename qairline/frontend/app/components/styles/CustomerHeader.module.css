@@ -1,0 +1,134 @@
+/* General header styling */
+.header {
+	padding-top: 20px;
+	background: var(--background);
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	font-size: 17px;
+}
+
+.wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: auto;
+}
+
+/* Logo styling */
+.wrapper .logo {
+	position: relative;
+	padding-bottom: 15px;
+	padding-right: 15px;
+}
+
+.wrapper .logo img {
+	height: 50px;
+	width: auto;
+	cursor: pointer;
+
+}
+
+/* Container */
+.container{
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	justify-content: space-between;
+	padding-bottom: 15px;
+	padding-left: 10px;
+}
+
+
+
+/* Navigation bar styling */
+.nav {
+	width: 100%;
+	display: flex;
+}
+
+.navList {
+	flex: 1;
+	list-style: none;
+	display: flex;
+	justify-content: left;
+	margin: 0;
+	padding: 0;
+}
+
+.navList li {
+	cursor: pointer;
+	padding: 0.5rem 1rem;
+	border-radius: 5px;
+	color: var(--foreground);
+	font-family: "Montserrat", sans-serif;
+}
+
+.navList li:hover {
+	background-color: var(--foreground);
+	cursor: pointer;
+	color: var(--background);
+	transition: background-color 0.5s ease, color 0.5s ease; /* Add transition for smooth effect */
+}
+
+.navList .active {
+	background-color: #D9EAF3;
+	font-weight: bold;
+}
+
+/* Account button and dropdown menu styling */
+.accountButton {
+	position: relative;
+}
+
+.dropdownMenu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: var(--background);
+	border: 1px solid var(--foreground);
+	border-radius: 5px;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	z-index: 1000;
+
+	.signOutButton:hover {
+		background-color: var(--warning); /* Nền đỏ khi hover */
+		color: var(--background);            /* Chữ trắng khi hover */
+	}
+}
+
+.dropdownMenu li {
+	padding: 0.5rem 1rem;
+	cursor: pointer;
+	font-size: 13px;
+}
+
+.dropdownMenu li:hover {
+	background-color: var(--foreground);
+	color: var(--background);
+}
+
+
+/* Mobile responsiveness */
+@media (max-width: 800px) {
+	.container {
+		padding: 10px;
+	}
+
+	.navList {
+		align-items: flex-start;
+	}
+
+	.navList li {
+		padding: 0.5rem;
+		width: 100%;
+		text-align: left;
+	}
+
+	.logo img {
+		height: 40px;
+	}
+}

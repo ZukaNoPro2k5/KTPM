@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #F5F5F5;
+  --foreground: #155B80;
+  --warning: #500d10
+}
+
+@media (prefers-color-scheme: no-preference ) {
+  :root {
+    --background: #F5F5F5;
+    --foreground: #155B80;
+  }
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Đảm bảo body có đủ chiều cao và không bị tràn */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Chiều cao tối thiểu bằng viewport */
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Monsterat", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* Nội dung sẽ chiếm phần còn lại của màn hình */
+}
+
+footer {
+  background-color: white;
+  color: #333;
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid #ddd;
+  position: relative; /* Sửa lại thành position relative */
+  bottom: 0;
+  width: 100%;
+  margin-top: auto; /* Đảm bảo footer không bị chèn nếu nội dung dài */
+}
+
+/* Footer khi trang có ít nội dung */
+footer.fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: no-preference ) {
+  html {
+    color-scheme: light;
+  }
+}

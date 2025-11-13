@@ -1,0 +1,24 @@
+.blogContainer {
+  display: flex;
+  justify-content: center; /* Căn ngang */
+  align-items: center; /* Căn dọc */
+  height: 60vh; /* Chiều cao bằng 60% của viewport */
+  width: 60vw; /* Chiều rộng bằng 80% của viewport */
+  margin: auto; /* Đặt container ở giữa */
+  text-align: center;
+  border: 5px solid #000; /* Viền đen 5px */
+  border-radius: 10px; /* Bo góc viền */
+  background-image: url('/AdminHomePage/airplane_background.png'); /* Đường dẫn ảnh */
+  background-size: cover; /* Ảnh phủ đầy container */
+  background-position: center; /* Căn giữa ảnh nền */
+  background-repeat: no-repeat; /* Không lặp lại ảnh */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+}
+
+
+.title {
+  font-size: 3rem; /* Kích thước chữ lớn hơn */
+  font-weight: bold; /* Tô đậm chữ */
+  color: #333; /* Màu chữ (tùy chỉnh) */
+  margin: 0; /* Loại bỏ margin mặc định */
+}

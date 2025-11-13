@@ -1,0 +1,37 @@
+.container {
+    background-color: #f9f9f9;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 1000px;
+    margin: 40px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.postDate {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 15px;
+    font-style: italic;
+    text-align: right;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    color: var(--foreground);
+}
+
+.divider {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 20px 0;
+}
+
+.description {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    text-align: justify;
+    color: #555;
+}

@@ -1,0 +1,258 @@
+/* Chi tiet giai thich: https://docs.google.com/document/d/1nODdki0r2RcgPhPUG_MXHBd9q2NtNPuFjhOxfeeOByA/edit?tab=t.xa4l2gp52oqb */
+
+/* Container for the entire component */
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 48rem; 
+    max-width: 100%;
+    height: 30rem; 
+    background: #fff;
+    border-radius: 0.625rem; 
+    box-shadow: 0 0.875rem 1.75rem rgba(0, 0, 0, 0.25), 0 0.625rem 0.625rem rgba(0, 0, 0, 0.22);
+    overflow: hidden;
+}
+
+/* Button to close the popup */
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--foreground);
+    padding: 0 10px;
+    border-radius: 5px;
+    color: var(--background);
+    font-size: 1.27rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 101;
+}
+
+.closeButton:hover {
+    background-color: #333333;
+}
+
+
+/* Sign-in and Sign-up forms */
+.signIn,
+.signUp {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+    transition: all 0.6s ease-in-out;
+    z-index: 1;
+}
+
+.signUp {
+    left: 0;
+    opacity: 0;
+}
+
+.signIn {
+    left: 0;
+    z-index: 2;
+}
+
+.errorText {
+    color: red;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+
+/* Form styles */
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+}
+
+.formTitle {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.formText {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 100;
+    margin: 1rem 0;
+    line-height: 1.25rem;
+}
+
+.inputField {
+    background: #eee;
+    border: none;
+    border-radius: 0.3125rem; /* 5px */
+    padding: 0.75rem; /* 12px */
+    margin: 0.5rem 0;
+    width: 100%;
+    outline: none;
+}
+
+.formLink {
+    text-decoration: none;
+    color: #333;
+    margin: 0.5rem 0;
+    font-size: 0.875rem; /* 14px */
+}
+
+.formButton {
+    background: #005fa3;
+    color: var(--background);
+    border: none;
+    border-radius: 1.25rem; /* 20px */
+    padding: 0.75rem 3.5rem;
+    margin: 1.25rem 0;
+    font-size: 0.75rem; /* 12px */
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 80ms ease-in;
+}
+
+.formButton:active {
+    transform: scale(0.9);
+}
+
+/* Overlay container */
+.overlayContainer {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+/* Overlay Styles */
+.overlay {
+    position: relative;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(to right, var(--foreground), #167db5);
+    color: #fff;
+    left: -100%;
+    transition: transform 0.6s ease-in-out;
+}
+
+
+/* Left and right overlays */
+.overlayLeft,
+.overlayRight {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    text-align: center;
+    padding: 0 2rem;
+}
+
+.overlayLeft {
+    transform: translateX(-5%);
+}
+
+.overlayRight {
+    right: 0;
+    transform: translateX(0%);
+}
+
+.overlayText {
+    font-size: 0.875rem;
+    margin: 1rem 0;
+}
+
+.overlayButton {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 1.25rem; /* 20px */
+    padding: 0.75rem 2rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 80ms ease-in, background-color 0.3s ease;
+}
+
+.overlayButton:hover {
+    background-color: #fff;
+    color: #005fa3;
+}
+
+.overlayButton:active {
+    transform: scale(0.9);
+}
+
+/* Social icons */
+.socialContainer a {
+    height: 2.5rem; /* 40px */
+    width: 2.5rem; /* 40px */
+    margin: 0 0.3125rem; /* 5px */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    transition: background 0.3s ease;
+}
+
+.socialContainer a:hover {
+    background: #005fa3;
+    color: #fff;
+}
+
+/* Active state when switching to sign-up */
+.containerRightPanelActive .signUp {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+}
+
+.containerRightPanelActive .signIn {
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 1;
+}
+
+.containerRightPanelActive .overlayContainer {
+    transform: translateX(-100%);
+}
+
+.containerRightPanelActive .overlay {
+    transform: translateX(50%);
+}
+
+
+/* 
+RightPanelActive = false
+    SignUp_Zindex = 0, SignIn_Zindex = 2
+    overlayContainer: 0% (nua ben phai PopUp)
+    overlayLeft: -5% (ben trai cua overlayContainer)
+    overlayRight: 0% (cung vi tri overlayContainer - Hien len)
+
+
+RightPanelActive = true
+    SignUp_Zindex = 1, SignIn_Zindex = 5
+    overlayContainer:-100% (nua ben trai PopUp)
+    overlayLeft: -100% (ben trai overlayContainer - Hien len)
+    overlayRight: 50% (ben phai overlayContainer)
+Chu y: Zindex cua cac overlay deu la 100
+*/

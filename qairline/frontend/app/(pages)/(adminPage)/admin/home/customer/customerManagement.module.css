@@ -1,0 +1,60 @@
+.tableContainer {
+    width: 90vw; /* Chiều rộng bảng chiếm 90% màn hình */
+    margin: 2rem auto; /* Căn giữa bảng và cách đều 2 bên */
+    text-align: center;
+    border: 5px solid #000;
+    border-radius: 10px;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .title {
+    margin-bottom: 1rem;
+    font-weight: bolder;
+    color: #333;
+    font-size:xx-large;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  
+  .table th {
+    background-color: #167db5;
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .table tr:hover {
+    background-color: #e3f2fd;
+  }
+  
+
+  .searchBar {
+    width: 50%; /* Chiều rộng thanh tìm kiếm */
+    margin: 1rem auto; /* Căn giữa thanh tìm kiếm */
+    padding: 0.8rem; /* Đệm bên trong */
+    border: 1px solid #ccc; /* Viền màu xám nhạt */
+    border-radius: 5px; /* Góc bo tròn */
+    font-size: 1rem; /* Kích thước chữ */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+  }
+  
+  .searchBar:focus {
+    border-color: #167db5; /* Màu viền khi focus */
+    outline: none; /* Bỏ viền mặc định */
+    box-shadow: 0 0 8px rgba(22, 125, 181, 0.5); /* Hiệu ứng focus */
+  }

@@ -1,12 +1,31 @@
 {
   "name": "qairline",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "QAirline monorepo: API Gateway + microservices (run locally without Docker)",
+  "workspaces": [
+    "api-gateway",
+    "frontend",
+    "services/*-service"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently -n web,gateway,flight,booking,user,offer -c white,green,cyan,magenta,yellow,blue \"npm run dev -w frontend\" \"npm run dev -w api-gateway\" \"npm run dev -w services/flight-service\" \"npm run dev -w services/booking-service\" \"npm run dev -w services/user-service\" \"npm run dev -w services/offer-service\"",
+    "dev:gateway": "npm run dev -w api-gateway",
+    "dev:web": "npm run dev -w frontend",
+    "dev:services": "concurrently -n flight,booking,user,offer -c cyan,magenta,yellow,blue \"npm run dev -w services/flight-service\" \"npm run dev -w services/booking-service\" \"npm run dev -w services/user-service\" \"npm run dev -w services/offer-service\"",
+    "build": "npm run build -ws",
+    "start": "npm run start -w api-gateway",
+    "test:db": "node test-database-connection.js",
+    "test:db-find-password": "node find-mysql-password.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "mysql2": "^3.15.3"
+  }
 }

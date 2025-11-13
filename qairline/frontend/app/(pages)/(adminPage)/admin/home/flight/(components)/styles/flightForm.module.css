@@ -1,0 +1,90 @@
+.overlay {
+  position: absolute; /* Cho phép nội dung dài hơn cuộn được */
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100%; /* Đảm bảo overlay bao phủ toàn màn hình */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Để form nằm ở đầu overlay */
+  overflow-y: auto; /* Cho phép cuộn theo chiều dọc */
+  padding: 20px 0; /* Tạo khoảng cách trên dưới giữa form và viền màn hình */
+}
+
+
+.formContainer {
+  background-color: #E3F2FD;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-height: 90vh; /* Giới hạn chiều cao form tối đa là 90% chiều cao màn hình */
+  overflow-y: auto; /* Cho phép cuộn trong form nếu cần */
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #167db5;
+}
+
+.formGroup {
+  margin-bottom: 12px;
+}
+
+.inputField input {
+  width: 100%;
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 12px;
+}
+
+.inputField textarea {
+  width: 100%;
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 12px;
+}
+
+.inputField label {
+  display: block;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancelButton {
+  background-color: #ccc;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.submitButton {
+  background-color: #167db5;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* Thêm kiểu cho dropdown */
+.inputField select {
+  width: 100%;
+  border-radius: 8px;
+  padding: 6px;
+  margin-bottom: 12px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.inputField select:focus {
+  outline: none;
+  border-color: #167db5;
+}
+

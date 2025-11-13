@@ -1,0 +1,71 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-right: 1px solid #ddd;
+  color: #333;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.table td:last-child {
+  border-right: none;
+}
+
+.table tr:hover {
+  background-color: #f1f8ff;
+}
+
+.editButton, .deleteButton {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block; /* Đảm bảo các nút có thể căn chỉnh ngang */
+  text-align: center; /* Căn giữa nội dung bên trong nút */
+}
+
+.editButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.editButton:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+  margin-left: 10px; /* Khoảng cách giữa 2 nút */
+}
+
+.deleteButton:hover {
+  background-color: #a71d2a;
+  transform: scale(1.05);
+}
+
+.deleteButton:focus, .editButton:focus {
+  outline: none;
+}
+
+.table td:last-child {
+  display: flex;
+  justify-content: center; /* Căn giữa nội dung trong cột */
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
