@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAdminAuth } from "@/app/hooks/useAdminAuth";
 import styles from "./customerManagement.module.css";
 
 interface Booking {
@@ -42,23 +43,12 @@ const CustomerPage = () => {
     totalBookings: number;
     timestamp: string;
   } | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Kiểm tra xác thực người dùng
   const router = useRouter();
+  const { isLoading: authLoading, isAdmin } = useAdminAuth();
 
-  // Kiểm tra token khi trang load
+  // Fetch API when admin auth is verified
   useEffect(() => {
-    const userID = getUserID();
-    if (!userID) {
-      // Nếu không có userID, điều hướng về trang /admin
-      router.push("/admin");
-    } else {
-      setIsAuthenticated(true); // Nếu token hợp lệ, xác thực người dùng
-    }
-  }, [router]);
-
-  // Fetch API khi người dùng đã được xác thực
-  useEffect(() => {
-    if (!isAuthenticated) return;
+    if (authLoading || !isAdmin) return;
 
     const fetchData = async () => {
       try {
@@ -95,7 +85,15 @@ const CustomerPage = () => {
     };
 
     fetchData();
-  }, [isAuthenticated]);
+  }, [authLoading, isAdmin]);
+
+  if (authLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAdmin) {
+    return null; // Will redirect automatically
+  }
 
   // Lọc dữ liệu theo `BookingDate`
   useEffect(() => {

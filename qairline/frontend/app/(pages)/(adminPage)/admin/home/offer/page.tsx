@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAdminAuth } from "@/app/hooks/useAdminAuth";
 import styles from "./createOfferPage.module.css";
 
 function CreateOfferPage() {
@@ -8,10 +9,9 @@ function CreateOfferPage() {
     const [description, setDescription] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [userID, setUserID] = useState<string | null>(null);
     const router = useRouter();
+    const { isLoading: authLoading, isAdmin } = useAdminAuth();
 
     // Hàm giải mã token và lấy userID
     const getUserIDFromToken = () => {
@@ -28,19 +28,22 @@ function CreateOfferPage() {
         }
     };
 
-    // Kiểm tra token khi trang load
+    // Get userID when admin auth is verified
     useEffect(() => {
-        const userID = getUserIDFromToken();
-        if (!userID) {
-            setError("User is not authenticated. Please log in again.");
-            setLoading(false);
-            router.push("/admin"); // Redirect to /admin if no valid token
-            return;
+        if (authLoading || !isAdmin) return;
+        const id = getUserIDFromToken();
+        if (id) {
+            setUserID(id);
         }
-        setUserID(userID); // Set userID in state
-        setIsAuthenticated(true);
-        setLoading(false); // After checking the token, stop loading
-    }, [router]);
+    }, [authLoading, isAdmin]);
+
+    if (authLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!isAdmin) {
+        return null; // Will redirect automatically
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

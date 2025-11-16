@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Page about Airline",
 };
 
-export default function HomeLayout({ children }: { children: React.ReactNode }) {
+export default function AdminPageLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={montserrat.className}>

@@ -1,11 +1,136 @@
+version: "3.8"
+
 services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: qairline-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: MyRootPass123
+      MYSQL_DATABASE: QAirline
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: MyRootPass123
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # User Service
+  user-service:
+    build: ./qairline/services/user-service    # ✅ ĐÚNG PATH
+    container_name: qairline-user-service
+    ports:
+      - "3004:3004"
+    environment:
+      - PORT=3004
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=dev
+      - DB_PASSWORD=MyRootPass123
+      - DB_NAME=QAirline
+      - JWT_SECRET=your-secret-key-here
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Flight Service
+  flight-service:
+    build: ./qairline/services/flight-service  # ✅ ĐÚNG PATH
+    container_name: qairline-flight-service
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=dev
+      - DB_PASSWORD=MyRootPass123
+      - DB_NAME=QAirline
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Booking Service
+  booking-service:
+    build: ./qairline/services/booking-service
+    container_name: qairline-booking-service
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=dev
+      - DB_PASSWORD=MyRootPass123
+      - DB_NAME=QAirline
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Offer Service
+  offer-service:
+    build: ./qairline/services/offer-service   # ✅ ĐÚNG PATH
+    container_name: qairline-offer-service
+    ports:
+      - "3005:3005"
+    environment:
+      - PORT=3005
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=dev
+      - DB_PASSWORD=MyRootPass123
+      - DB_NAME=QAirline
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # API Gateway
+  api-gateway:
+    build: ./qairline/api-gateway              # ✅ ĐÚNG PATH
+    container_name: qairline-api-gateway
+    ports:
+      - "3006:3006"
+    environment:
+      - PORT=3006
+      - USER_SERVICE_URL=http://user-service:3004
+      - FLIGHT_SERVICE_URL=http://flight-service:3002
+      - BOOKING_SERVICE_URL=http://booking-service:3003
+      - OFFER_SERVICE_URL=http://offer-service:3005
+      - FRONTEND_ORIGIN=http://localhost:3000
+    depends_on:
+      - user-service
+      - flight-service
+      - booking-service
+      - offer-service
+
+  # Frontend
   frontend:
-    build: ./frontend
+    build: ./qairline/frontend                 # ✅ ĐÚNG PATH
+    container_name: qairline-frontend
     ports:
       - "3000:3000"
-  backend:
-    build: ./backend
-    ports:
-      - "3001:3001"
+    environment:
+      - NEXT_PUBLIC_API_GATEWAY=http://localhost:3006
     depends_on:
-      - frontend
+      - api-gateway
+
+  # phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: qairline-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: MyRootPass123
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+    driver: local

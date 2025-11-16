@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAdminAuth } from "@/app/hooks/useAdminAuth";
 import styles from './aircraftPage.module.css';
 import AircraftTable from './(component)/AircraftTable';
 import AircraftForm from './(component)/AircraftForm';
@@ -12,8 +13,9 @@ export default function AircraftManagementPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedAircraft, setSelectedAircraft] = useState<Aircraft | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true); // Track loading state
-  const router = useRouter(); // Hook để điều hướng
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { isLoading: authLoading, isAdmin } = useAdminAuth();
 
   // Hàm lấy userID từ token
   const getUserIDFromToken = () => {
@@ -28,16 +30,14 @@ export default function AircraftManagementPage() {
     }
   };
 
-  // Kiểm tra token khi trang load và điều hướng nếu không có token
+  // Fetch aircrafts when admin auth is verified
   useEffect(() => {
-    const userID = getUserIDFromToken();
-    if (!userID) {
-      router.push('/admin'); // Điều hướng về trang login nếu không có token
-      return;
-    }
+    if (authLoading || !isAdmin) return;
 
-    // Nếu có token, tiếp tục xử lý
     async function fetchAircrafts() {
+      const userID = getUserIDFromToken();
+      if (!userID) return;
+
       try {
         const response = await fetch('http://localhost:3001/api/Aircrafts/GetAll', {
           method: 'POST',
@@ -62,6 +62,14 @@ export default function AircraftManagementPage() {
     }
 
     fetchAircrafts();
+  }, [authLoading, isAdmin]);
+
+  if (authLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAdmin) {
+    return null; // Will redirect automatically
   }, [router]);
 
   const handleAddAircraft = () => {

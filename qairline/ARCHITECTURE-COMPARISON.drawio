@@ -1,0 +1,255 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36" version="29.0.2" pages="3">
+  <diagram name="Old-Architecture" id="old-arch">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <!-- Title -->
+        <mxCell id="title-old" value="&lt;h1&gt;KIẾN TRÚC CŨ - MONOLITHIC&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="520" height="40" as="geometry" />
+        </mxCell>
+        <!-- Client -->
+        <mxCell id="client-old" value="&lt;b&gt;Client Browser&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="470" y="120" width="220" height="60" as="geometry" />
+        </mxCell>
+        <!-- Backend Container -->
+        <mxCell id="backend-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="520" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="backend-label" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;backend/ folder (Monolithic)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="430" y="250" width="300" height="30" as="geometry" />
+        </mxCell>
+        <!-- Routes -->
+        <mxCell id="routes-old" value="&lt;b&gt;Routes&lt;/b&gt;&lt;br&gt;FlightRoutes.ts&lt;br&gt;UserRoutes.ts" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="360" y="300" width="200" height="60" as="geometry" />
+        </mxCell>
+        <!-- Controllers -->
+        <mxCell id="controllers-old" value="&lt;b&gt;Controllers&lt;/b&gt;&lt;br&gt;FlightController.ts&lt;br&gt;UserController.ts&lt;br&gt;EmailService.ts" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="600" y="300" width="200" height="80" as="geometry" />
+        </mxCell>
+        <!-- Database Module -->
+        <mxCell id="db-module-old" value="&lt;b&gt;database/&lt;/b&gt;&lt;br&gt;database.ts&lt;br&gt;create-database.sql" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="460" y="420" width="200" height="70" as="geometry" />
+        </mxCell>
+        <!-- Database -->
+        <mxCell id="db-old" value="&lt;b&gt;MySQL Database&lt;/b&gt;&lt;br&gt;(All tables together)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="495" y="580" width="130" height="100" as="geometry" />
+        </mxCell>
+        <!-- Arrows -->
+        <mxCell id="arrow1-old" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" edge="1" parent="1" source="client-old" target="routes-old">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1-old-label" value="HTTP" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="arrow1-old">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow2-old" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" edge="1" parent="1" source="routes-old" target="controllers-old">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3-old" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" edge="1" parent="1" source="controllers-old" target="db-module-old">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4-old" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" edge="1" parent="1" source="db-module-old" target="db-old">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4-old-label" value="Direct SQL" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="arrow4-old">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Problems -->
+        <mxCell id="problems" value="&lt;b style=&quot;color: red;&quot;&gt;❌ VẤN ĐỀ:&lt;/b&gt;&lt;br&gt;• Tight coupling&lt;br&gt;• Khó test&lt;br&gt;• Khó scale&lt;br&gt;• 1 lỗi → crash toàn bộ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="200" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="New-Architecture" id="new-arch">
+    <mxGraphModel dx="1123" dy="1447" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0-new" />
+        <mxCell id="1-new" parent="0-new" />
+        <mxCell id="title-new" value="&lt;h1&gt;KIẾN TRÚC MỚI - MICROSERVICES&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" parent="1-new" vertex="1">
+          <mxGeometry x="350" y="40" width="700" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="client-new" value="&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;Client Browser&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;" parent="1-new" vertex="1">
+          <mxGeometry x="600" y="160" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;&amp;nbsp;API Gateway&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=13;" parent="1-new" vertex="1">
+          <mxGeometry x="600" y="240" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="services-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;dashed=1;dashPattern=8 8;" parent="1-new" vertex="1">
+          <mxGeometry x="200" y="342" width="1000" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="services-label" value="&lt;b style=&quot;font-size: 16px;&quot;&gt;Microservices Layer&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1-new" vertex="1">
+          <mxGeometry x="600" y="352" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="user-svc" value="&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;div&gt;&lt;b&gt;User Service&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1-new" vertex="1">
+          <mxGeometry x="290" y="402" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="flight-svc" value="&lt;div&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;Flight Service&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1-new" vertex="1">
+          <mxGeometry x="500" y="402" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="booking-svc" value="&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;div&gt;&lt;b&gt;Booking Service&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1-new" vertex="1">
+          <mxGeometry x="720" y="402" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="offer-svc" value="&lt;b&gt;&amp;nbsp;&lt;/b&gt;&lt;div&gt;&lt;b&gt;Offer Service&lt;/b&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1-new" vertex="1">
+          <mxGeometry x="930" y="402" width="180" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="user-db" value="User DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1-new" vertex="1">
+          <mxGeometry x="315" y="522" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="flight-db" value="Flight DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;" parent="1-new" vertex="1">
+          <mxGeometry x="525" y="522" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="booking-db" value="Booking DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1-new" vertex="1">
+          <mxGeometry x="745" y="522" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="offer-db" value="Offer DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1-new" vertex="1">
+          <mxGeometry x="955" y="522" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-client-gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#0e8088;" parent="1-new" source="client-new" target="gateway" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-client-gw-label" value="HTTP/REST" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="arrow-client-gw" vertex="1" connectable="0">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-gw-user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#82b366;" parent="1-new" source="gateway" target="user-svc" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-gw-user-label" value="/api/users" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="arrow-gw-user" vertex="1" connectable="0">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint x="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-gw-flight" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#b85450;" parent="1-new" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="700" y="320" as="sourcePoint" />
+            <mxPoint x="590" y="400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="590" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-gw-flight-label" value="/api/flights" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="arrow-gw-flight" vertex="1" connectable="0">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint x="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-gw-offer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#9673a6;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1-new" source="gateway" target="offer-svc" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1020" y="265" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-gw-offer-label" value="/api/offers" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="arrow-gw-offer" vertex="1" connectable="0">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint x="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-user-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" parent="1-new" source="user-svc" target="user-db" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-flight-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" parent="1-new" source="flight-svc" target="flight-db" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-offer-db" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;" parent="1-new" source="offer-svc" target="offer-db" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="q_t-fQjbWmMJwd2z73h4-5" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#FFFF66;strokeColor=#C6C80C;strokeWidth=2;" edge="1" parent="1-new" source="gateway" target="booking-svc">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="700" y="320" />
+              <mxPoint x="810" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q_t-fQjbWmMJwd2z73h4-6" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;strokeColor=#C6C80C;" edge="1" parent="1-new" source="booking-svc" target="booking-db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="Comparison" id="comparison">
+    <mxGraphModel dx="1434" dy="844" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+      <root>
+        <mxCell id="0-comp" />
+        <mxCell id="1-comp" parent="0-comp" />
+        <!-- Title -->
+        <mxCell id="title-comp" value="&lt;h1&gt;SO SÁNH KIẾN TRÚC&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1-comp">
+          <mxGeometry x="350" y="40" width="500" height="40" as="geometry" />
+        </mxCell>
+        <!-- Old Side -->
+        <mxCell id="old-side-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" vertex="1" parent="1-comp">
+          <mxGeometry x="80" y="120" width="500" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="old-side-title" value="&lt;h2&gt;❌ CŨ: Tight Coupling&lt;/h2&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" vertex="1" parent="1-comp">
+          <mxGeometry x="180" y="140" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="old-controller" value="&lt;b&gt;Controller&lt;/b&gt;&lt;br&gt;• Routing logic&lt;br&gt;• Business logic&lt;br&gt;• Data access logic&lt;br&gt;• Validation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=left;" vertex="1" parent="1-comp">
+          <mxGeometry x="180" y="220" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="old-db-access" value="&lt;b&gt;Direct Database Access&lt;/b&gt;&lt;br&gt;• Raw SQL queries&lt;br&gt;• No abstraction&lt;br&gt;• Hard to test&lt;br&gt;• Hard to change" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=left;" vertex="1" parent="1-comp">
+          <mxGeometry x="180" y="380" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="old-db" value="&lt;b&gt;Database&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1-comp">
+          <mxGeometry x="265" y="560" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-old-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=3;strokeColor=#b85450;" edge="1" parent="1-comp" source="old-controller" target="old-db-access">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-old-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=3;strokeColor=#b85450;" edge="1" parent="1-comp" source="old-db-access" target="old-db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- New Side -->
+        <mxCell id="new-side-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;" vertex="1" parent="1-comp">
+          <mxGeometry x="620" y="120" width="500" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="new-side-title" value="&lt;h2&gt;✅ MỚI: Loose Coupling&lt;/h2&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" vertex="1" parent="1-comp">
+          <mxGeometry x="720" y="140" width="300" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="new-routes" value="&lt;b&gt;Routes (API Layer)&lt;/b&gt;&lt;br&gt;• HTTP routing only&lt;br&gt;• Request/Response&lt;br&gt;• No business logic" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#b0e3e6;strokeColor=#0e8088;fontSize=12;align=left;" vertex="1" parent="1-comp">
+          <mxGeometry x="720" y="220" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="new-services" value="&lt;b&gt;Services (Business Layer)&lt;/b&gt;&lt;br&gt;• Business logic&lt;br&gt;• Validation&lt;br&gt;• Orchestration&lt;br&gt;• Uses DTOs" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;align=left;" vertex="1" parent="1-comp">
+          <mxGeometry x="720" y="340" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="new-repos" value="&lt;b&gt;Repositories (Data Layer)&lt;/b&gt;&lt;br&gt;• Data operations&lt;br&gt;• Query abstraction&lt;br&gt;• Easy to test&lt;br&gt;• Easy to change DB" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=left;" vertex="1" parent="1-comp">
+          <mxGeometry x="720" y="480" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="new-db" value="&lt;b&gt;Database&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1-comp">
+          <mxGeometry x="805" y="630" width="130" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-new-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#0e8088;" edge="1" parent="1-comp" source="new-routes" target="new-services">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-new-1-label" value="Interface" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="arrow-new-1">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-new-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#b85450;" edge="1" parent="1-comp" source="new-services" target="new-repos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-new-2-label" value="Interface" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="arrow-new-2">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-new-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1-comp" source="new-repos" target="new-db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-new-3-label" value="ORM" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="arrow-new-3">
+          <mxGeometry x="-0.1" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

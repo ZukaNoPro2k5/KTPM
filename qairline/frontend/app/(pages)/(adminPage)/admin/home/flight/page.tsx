@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import { useAdminAuth } from "@/app/hooks/useAdminAuth";
 import { Flight } from './flightObject';
 import FlightTable from './(components)/FlightTable';
 import FlightForm from './(components)/FlightForm';
@@ -10,8 +11,8 @@ export default function FlightManagement() {
   const [flights, setFlights] = useState<Flight[]>([]);
   const [currentFlight, setCurrentFlight] = useState<Flight | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Thêm trạng thái loading để kiểm tra token
   const router = useRouter();
+  const { isLoading, isAdmin } = useAdminAuth();
 
   // Lấy userID từ decodeToken trong localStorage
   const getUserID = () => {
@@ -35,6 +36,14 @@ export default function FlightManagement() {
       console.error('Error fetching flights:', error);
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isAdmin) {
+    return null; // Will redirect automatically
+  }
 
   const handleAdd = () => {
     setCurrentFlight(null);

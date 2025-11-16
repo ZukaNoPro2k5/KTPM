@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QAirline Architecture Comparison</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 40px;
+        }
+        .diagram-section {
+            margin: 40px 0;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 5px solid #4299e1;
+        }
+        h2 {
+            color: #2d3748;
+            margin-top: 0;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .comparison-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .comparison-item h3 {
+            margin-top: 0;
+            color: #2d3748;
+        }
+        .old {
+            border-left: 4px solid #fc8181;
+        }
+        .new {
+            border-left: 4px solid #68d391;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+            color: #4a5568;
+        }
+        .benefits {
+            background: #f0fff4;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        .benefits h3 {
+            color: #22543d;
+            margin-top: 0;
+        }
+        .benefit-item {
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+        .benefit-title {
+            font-weight: bold;
+            color: #2f855a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛫 QAirline Architecture Comparison</h1>
+        <p class="subtitle">So sánh Kiến trúc Cũ (Monolithic) vs Mới (Microservices)</p>
+
+        <!-- Old Architecture -->
+        <div class="diagram-section">
+            <h2>📦 Kiến trúc CŨ - Monolithic Backend</h2>
+            <div class="mermaid">
+graph TB
+    subgraph "Backend Monolithic Structure"
+        Client[👤 Client Browser]
+        
+        subgraph "backend/ folder"
+            Routes[Routes<br/>FlightRoutes.ts<br/>UserRoutes.ts]
+            Controllers[Controllers<br/>FlightController.ts<br/>UserController.ts<br/>EmailService.ts]
+            Database[database/<br/>database.ts<br/>create-database.sql]
+        end
+        
+        DB[(🗄️ MySQL Database<br/>All tables together)]
+        
+        Client -->|HTTP Requests| Routes
+        Routes --> Controllers
+        Controllers --> Database
+        Database -->|Direct SQL| DB
+    end
+    
+    style Routes fill:#ff6b6b,color:#fff
+    style Controllers fill:#ff8787,color:#fff
+    style Database fill:#ffa8a8,color:#fff
+    style DB fill:#4ecdc4,color:#fff
+            </div>
+        </div>
+
+        <!-- New Architecture -->
+        <div class="diagram-section">
+            <h2>🎯 Kiến trúc MỚI - Microservices Architecture</h2>
+            <div class="mermaid">
+graph TB
+    Client[👤 Client Browser<br/>Next.js Frontend]
+    
+    subgraph "API Layer"
+        Gateway[🚪 API Gateway<br/>Port 3000<br/>api-gateway/]
+    end
+    
+    subgraph "Microservices Layer"
+        UserSvc[👤 User Service<br/>Port 3001<br/>user-service/]
+        FlightSvc[✈️ Flight Service<br/>Port 3002<br/>flight-service/]
+        BookingSvc[🎫 Booking Service<br/>Port 3003<br/>booking-service/]
+        OfferSvc[🎁 Offer Service<br/>Port 3004<br/>offer-service/]
+    end
+    
+    subgraph "Database Layer"
+        UserDB[(👥 User Database)]
+        FlightDB[(✈️ Flight Database)]
+        BookingDB[(🎫 Booking Database)]
+        OfferDB[(🎁 Offer Database)]
+    end
+    
+    Client -->|HTTP/REST| Gateway
+    Gateway -->|/api/users| UserSvc
+    Gateway -->|/api/flights| FlightSvc
+    Gateway -->|/api/bookings| BookingSvc
+    Gateway -->|/api/offers| OfferSvc
+    
+    UserSvc -->|ORM/SQL| UserDB
+    FlightSvc -->|ORM/SQL| FlightDB
+    BookingSvc -->|ORM/SQL| BookingDB
+    OfferSvc -->|ORM/SQL| OfferDB
+    
+    style Gateway fill:#4ecdc4,color:#fff
+    style UserSvc fill:#95e1d3
+    style FlightSvc fill:#f38181,color:#fff
+    style BookingSvc fill:#fce38a
+    style OfferSvc fill:#c7ecee
+            </div>
+        </div>
+
+        <!-- Dependency Comparison -->
+        <div class="diagram-section">
+            <h2>🔗 So sánh Dependencies</h2>
+            <div class="mermaid">
+graph LR
+    subgraph "CŨ: Tight Coupling ❌"
+        C1[Controller] -->|Direct Access| D1[Database]
+        C1 -->|Mixed Logic| L1[Business + Data]
+        L1 --> D1
+        
+        style C1 fill:#ff6b6b,color:#fff
+        style L1 fill:#ff6b6b,color:#fff
+        style D1 fill:#ff6b6b,color:#fff
+    end
+    
+    subgraph "MỚI: Loose Coupling ✅"
+        API[API Routes] -->|Interface| S[Services]
+        S -->|Interface| R[Repositories]
+        R -->|ORM| DB[Database]
+        
+        API -.->|DTO| S
+        S -.->|DTO| R
+        
+        style API fill:#95e1d3
+        style S fill:#f38181,color:#fff
+        style R fill:#fce38a
+        style DB fill:#4ecdc4,color:#fff
+    end
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="comparison">
+            <div class="comparison-item old">
+                <h3>❌ Kiến trúc CŨ - Vấn đề</h3>
+                <ul>
+                    <li>Tất cả code trong 1 folder backend/</li>
+                    <li>Controllers xử lý trực tiếp database</li>
+                    <li>Khó test riêng lẻ từng phần</li>
+                    <li>Thay đổi 1 chỗ ảnh hưởng nhiều nơi</li>
+                    <li>Scale phải scale toàn bộ app</li>
+                    <li>1 service lỗi → toàn bộ app down</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-item new">
+                <h3>✅ Kiến trúc MỚI - Ưu điểm</h3>
+                <ul>
+                    <li>Mỗi service độc lập (user, flight, booking, offer)</li>
+                    <li>Layers rõ ràng: Routes → Services → Repositories</li>
+                    <li>Dễ test với mock dependencies</li>
+                    <li>Thay đổi 1 service không ảnh hưởng service khác</li>
+                    <li>Scale từng service riêng biệt</li>
+                    <li>1 service lỗi → các service khác vẫn hoạt động</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits">
+            <h3>🎯 Lợi ích Chính của Kiến trúc Mới</h3>
+            
+            <div class="benefit-item">
+                <div class="benefit-title">🔒 Separation of Concerns</div>
+                Mỗi layer có trách nhiệm riêng biệt, không lẫn lộn logic
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-title">🧪 Testability</div>
+                Dễ dàng viết unit tests, integration tests cho từng layer
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-title">🔧 Maintainability</div>
+                Code dễ đọc, dễ sửa, dễ mở rộng tính năng mới
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-title">♻️ Reusability</div>
+                Services và Repositories có thể tái sử dụng ở nhiều nơi
+            </div>
+            
+            <div class="benefit-item">
+                <div class="benefit-title">📈 Scalability</div>
+                Scale từng service độc lập theo nhu cầu thực tế
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                fontSize: '16px'
+            }
+        });
+    </script>
+</body>
+</html>

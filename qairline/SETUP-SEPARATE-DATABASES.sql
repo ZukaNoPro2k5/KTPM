@@ -245,3 +245,6 @@ SELECT 'offer_service_db' AS db_name, 'Offers' AS table_name, COUNT(*) AS Record
 -- 5. Cần implement validation và error handling cẩn thận
 -- ============================================
 SHOW DATABASES;
+use user_service_db
+INSERT INTO Users (Name, Username, Email, Password, Role)
+VALUES ('Admin','admin123','admin123@qairline.com','$2b$10$wYT7BdG717HqkDxyF1kg1.4Fhc.AgwMdkTQ00iPo4zZmzWiZC0XNu','Admin');

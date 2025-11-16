@@ -48,5 +48,9 @@ next-env.d.ts
 /dataSources/
 /dataSources.local.xml
 
+monolith-old/
+node_modules/
+
+
 /.idea/
 
